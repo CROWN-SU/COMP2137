@@ -1,0 +1,24 @@
+--2026-07-22 20:08:22--  https://github.com/zonzorp/COMP2137/raw/main/makecontainers.sh
+Resolving github.com (github.com)... 140.82.114.4
+Connecting to github.com (github.com)|140.82.114.4|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://raw.githubusercontent.com/zonzorp/COMP2137/main/makecontainers.sh [following]
+--2026-07-22 20:08:25--  https://raw.githubusercontent.com/zonzorp/COMP2137/main/makecontainers.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.111.133, 185.199.109.133, 185.199.110.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.111.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 15594 (15K) [text/plain]
+Saving to: ‘/home/student/makecontainers.sh’
+
+     0K .......... .....                                      100% 9.26M=0.002s
+
+2026-07-22 20:08:25 (9.26 MB/s) - ‘/home/student/makecontainers.sh’ saved [15594/15594]
+
+Warning: The unit file, source configuration file or drop-ins of systemd-networkd-wait-online.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+Warning: The unit file, source configuration file or drop-ins of netplan-ovs-cleanup.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/w/wget/wget_1.21.4-1ubuntu4.3_amd64.deb  404  Not Found [IP: 172.66.152.176 80]
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+sed: can't read /etc/ssh/sshd_config: No such file or directory
+Failed to restart ssh.service: Unit ssh.service not found.
+useradd warning: remoteadmin's uid 0 outside of the UID_MIN 1000 and UID_MAX 60000 range.
+assignment2.sh: Permission denied

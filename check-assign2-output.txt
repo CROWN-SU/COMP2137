@@ -1,0 +1,37 @@
+---Host/Student info----
+
+Running on Wed Jul 22 08:08:20 PM EDT 2026
+Run by student - () on host
+ Static hostname: generic-vm
+      Machine ID: 4b8be4404fc848d3b3ce95f9d6e8f8ce
+Operating System: Ubuntu 24.04.4 LTS
+a98742121b14ebe6350c4bf8245d0062  ./check-assign2-script.sh - a98742121b14ebe6350c4bf8245d0062  -
+------------------------
+
+---Start of Assignment2.sh Check------
+Retrieved makecontainers.sh script
+---Running makecontainers.sh----------
+Retrieving script library file
+This script performs many tasks. Please be patient
+To see more about what it is doing as it does it, use the --verbose option
+You may ignore any messages about Open vSwitch or dpkg-preconfigure being unable to re-open stdin
+DO NOT use control-Z when this script is running.
+Network lan deleted
+Network mgmt deleted
+Network lan created
+Network mgmt created
+Launching openwrt
+Retrieving image: Unpack: 100% (2.03GB/s)                                          Retrieving image: Unpack: 100% (2.03GB/s)                                          Launching server1
+Retrieving image: Unpack: 100% (1.16GB/s)                                          Retrieving image: Unpack: 100% (1.16GB/s)                                          inactive
+Pushing /home/student/.ssh/id_ed25519.pub to /home/remoteadmin/.ssh/id_ed25519.pub: 100% (269.54MB/s)                                                                                                      Waiting for server1 restart
+please let the script finish
+please let the script finish
+please let the script finish
+please let the script finish
+# Host server1-mgmt found: line 4
+# Host server1-mgmt found: line 5
+# Host server1-mgmt found: line 6
+/home/student/.ssh/known_hosts updated.
+Original contents retained as /home/student/.ssh/known_hosts.old
+---Retrieving assignment2.sh script---
+Failed to retrieve assignment2.sh script using URL 'https://github.com/CROWN-SU/COMP2137/raw/main/assignment2.sh'
