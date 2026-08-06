@@ -62,16 +62,10 @@ configure_network() {
     local target_ip="192.168.16.21"
     local target_cidr="192.168.16.21/24"
 
-    # Identify the interface facing the 192.168.16 network. That network is
-    # the only one of the two that routes to the internet (mgmt does not),
-    # so the interface holding the default route is our target - this holds
-    # true whether the interface currently has a DHCP or static address.
     local target_iface
     target_iface=$(ip route show default 2>/dev/null | awk '/^default/ {print $5; exit}')
 
     if [ -z "$target_iface" ]; then
-        # Fallback: look for any interface already carrying an address in
-        # the 192.168.16.0/24 range.
         target_iface=$(ip -o -4 addr show 2>/dev/null | awk '$4 ~ /^192\.168\.16\./ {print $2; exit}')
     fi
 
@@ -82,13 +76,10 @@ configure_network() {
 
     ok "Identified target interface: $target_iface"
 
-    # Find the netplan file that already defines this interface.
     local netplan_file
     netplan_file=$(grep -l -E "^\s*${target_iface}:" /etc/netplan/*.yaml 2>/dev/null | head -n1)
 
     if [ -z "$netplan_file" ]; then
-        # No existing stanza for it - use whichever netplan file exists, or
-        # create one if none exist at all.
         netplan_file=$(ls /etc/netplan/*.yaml 2>/dev/null | head -n1)
         if [ -z "$netplan_file" ]; then
             netplan_file="/etc/netplan/01-netcfg.yaml"
@@ -96,7 +87,6 @@ configure_network() {
         fi
     fi
 
-    # Check whether the interface is already configured correctly.
     local current_ip
     current_ip=$(ip -o -4 addr show dev "$target_iface" 2>/dev/null | awk '{print $4}' | head -n1)
 
@@ -105,8 +95,6 @@ configure_network() {
         return
     fi
 
-    # Use python3 to edit the YAML safely, preserving unrelated stanzas
-    # (this leaves the mgmt interface's configuration untouched).
     if ! command -v python3 >/dev/null 2>&1; then
         fail "python3 is required to edit netplan configuration but was not found."
         return
@@ -171,11 +159,9 @@ configure_hosts() {
     local target_ip="192.168.16.21"
     local hostname="server1"
 
-    # Does the correct line already exist?
     if grep -qE "^${target_ip}[[:space:]]+${hostname}(\s|$)" "$hostsfile"; then
         ok "/etc/hosts already has '$target_ip $hostname'"
     else
-        # Remove any existing lines that reference server1 (stale address)
         if grep -qE "[[:space:]]${hostname}([[:space:]]|$)" "$hostsfile"; then
             sed -i.bak -E "/[[:space:]]${hostname}([[:space:]]|$)/d" "$hostsfile"
             changed "Removed stale /etc/hosts entry for $hostname"
@@ -243,7 +229,6 @@ configure_users() {
     for user in "${USERLIST[@]}"; do
         local home="/home/${user}"
 
-        # Create the account if missing.
         if id "$user" >/dev/null 2>&1; then
             ok "User '$user' already exists"
         else
@@ -255,8 +240,6 @@ configure_users() {
             fi
         fi
 
-        # Ensure home directory exists and shell is bash regardless of
-        # whether the account pre-existed with different settings.
         if [ ! -d "$home" ]; then
             mkdir -p "$home"
             chown "${user}:${user}" "$home" 2>/dev/null
@@ -285,8 +268,9 @@ configure_users() {
 
         local ssh_dir="${home}/.ssh"
         mkdir -p "$ssh_dir"
+        chown "${user}:${user}" "$ssh_dir" 2>/dev/null
+        chmod 700 "$ssh_dir" 2>/dev/null
 
-        # rsa and ed25519 keys
         for algo in rsa ed25519; do
             local keyfile="${ssh_dir}/id_${algo}"
             if [ -f "$keyfile" ] && [ -f "${keyfile}.pub" ]; then
@@ -300,7 +284,6 @@ configure_users() {
             fi
         done
 
-        # authorized_keys: ensure both own public keys are present
         local authfile="${ssh_dir}/authorized_keys"
         touch "$authfile"
 
@@ -318,7 +301,6 @@ configure_users() {
             fi
         done
 
-        # dennis: additional hardcoded key + sudo group
         if [ "$user" = "dennis" ]; then
             if grep -qF "$DENNIS_EXTRA_KEY" "$authfile" 2>/dev/null; then
                 ok "dennis already has the required extra authorized key"
@@ -338,7 +320,6 @@ configure_users() {
             fi
         fi
 
-        # Permissions and ownership
         chown -R "${user}:${user}" "$ssh_dir" 2>/dev/null
         chmod 700 "$ssh_dir" 2>/dev/null
         chmod 600 "$authfile" 2>/dev/null
